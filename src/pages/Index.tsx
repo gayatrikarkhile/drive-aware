@@ -5,28 +5,14 @@ import MetricCard from "@/components/MetricCard";
 import TrendChart from "@/components/TrendChart";
 import DrivingHistory from "@/components/DrivingHistory";
 import AlarmPopup from "@/components/AlarmPopup";
+import Navbar from "@/components/Navbar";
 
 const Index = () => {
   const { current, trend, history, alertActive, dismissAlert } = useFatigueSimulation();
 
   return (
     <div className="min-h-screen bg-background scanline">
-      {/* Header */}
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Brain className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-gradient-primary">DriveSafe AI</h1>
-            <p className="text-xs text-muted-foreground">Fatigue Detection System</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-safe animate-pulse" />
-          <span className="text-xs text-muted-foreground font-display">LIVE</span>
-        </div>
-      </header>
+      <Navbar />
 
       {/* Main grid */}
       <main className="max-w-7xl mx-auto p-6 grid gap-6 lg:grid-cols-[280px_1fr]">
