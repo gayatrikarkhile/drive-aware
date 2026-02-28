@@ -1,23 +1,22 @@
 import { Brain, LayoutDashboard, Users, Bell, BarChart3, Settings, Shield } from "lucide-react";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Drivers", icon: Users },
-  { label: "Alerts", icon: Bell, badge: 3 },
-  { label: "Analytics", icon: BarChart3 },
-  { label: "Fleet Safety", icon: Shield },
-  { label: "Settings", icon: Settings },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/" },
+  { label: "Drivers", icon: Users, path: "/drivers" },
+  { label: "Alerts", icon: Bell, path: "/alerts", badge: 3 },
+  { label: "Analytics", icon: BarChart3, path: "/analytics" },
+  { label: "Fleet Safety", icon: Shield, path: "/fleet-safety" },
+  { label: "Settings", icon: Settings, path: "/settings" },
 ];
 
 export default function Navbar() {
-  const [active, setActive] = useState("Dashboard");
+  const { pathname } = useLocation();
 
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <div className="p-1.5 rounded-lg bg-primary/10">
             <Brain className="w-5 h-5 text-primary" />
           </div>
@@ -25,33 +24,34 @@ export default function Navbar() {
             <h1 className="text-sm font-bold text-gradient-primary font-display">DriveSafe AI</h1>
             <p className="text-[10px] text-muted-foreground">Fatigue Detection</p>
           </div>
-        </div>
+        </Link>
 
-        {/* Nav links - desktop */}
         <ul className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <li key={item.label}>
-              <button
-                onClick={() => setActive(item.label)}
-                className={`relative flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  active === item.label
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-              >
-                <item.icon className="w-4 h-4" />
-                <span className="hidden lg:inline">{item.label}</span>
-                {item.badge && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-danger text-danger-foreground text-[10px] font-bold flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <li key={item.label}>
+                <Link
+                  to={item.path}
+                  className={`relative flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span className="hidden lg:inline">{item.label}</span>
+                  {item.badge && (
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-danger text-danger-foreground text-[10px] font-bold flex items-center justify-center">
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
-        {/* Right side */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-safe animate-pulse" />
@@ -66,27 +66,29 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile nav */}
-      <div className="md:hidden flex items-center gap-1 px-4 pb-2 overflow-x-auto scrollbar-none">
-        {navItems.map((item) => (
-          <button
-            key={item.label}
-            onClick={() => setActive(item.label)}
-            className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
-              active === item.label
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <item.icon className="w-3.5 h-3.5" />
-            {item.label}
-            {item.badge && (
-              <span className="w-4 h-4 rounded-full bg-danger text-danger-foreground text-[10px] font-bold flex items-center justify-center">
-                {item.badge}
-              </span>
-            )}
-          </button>
-        ))}
+      <div className="md:hidden flex items-center gap-1 px-4 pb-2 overflow-x-auto">
+        {navItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <Link
+              key={item.label}
+              to={item.path}
+              className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                isActive
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <item.icon className="w-3.5 h-3.5" />
+              {item.label}
+              {item.badge && (
+                <span className="w-4 h-4 rounded-full bg-danger text-danger-foreground text-[10px] font-bold flex items-center justify-center">
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
